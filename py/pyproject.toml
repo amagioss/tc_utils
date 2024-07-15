@@ -1,0 +1,13 @@
+
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tc_utils"
+version = "0.1.0"
+description = "A package timecode conversions"
+requires-python = ">=3.8"
+keywords = ["timecode"]
+dependencies = [
+]
