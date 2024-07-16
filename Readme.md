@@ -39,3 +39,8 @@ Dervied from the original code present in https://github.com/spiretechnology/go-
 ## Javascript
 
 Derived from the original code present in https://github.com/spiretechnology/js-timecode
+
+```bash
+npm i jest
+npm run test
+```
