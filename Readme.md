@@ -33,4 +33,9 @@ tc_utils.GetTimeStr(4803.470, tc_utils.SmpteTimecode, rate=tc_utils.Rate_30)
 
 ## Golang
 
-Dervied from the priginal code present in https://github.com/spiretechnology/go-timecode
+Dervied from the original code present in https://github.com/spiretechnology/go-timecode
+
+
+## Javascript
+
+Derived from the original code present in https://github.com/spiretechnology/js-timecode
