@@ -30,11 +30,22 @@ tc_utils.GetTimeStr(4803.470, tc_utils.SmpteTimecode, rate=tc_utils.Rate_29_97)
 tc_utils.GetTimeStr(4803.470, tc_utils.SmpteTimecode, rate=tc_utils.Rate_30) 
 ```
 
+**Test**
+
+```bash
+cdp py
+pytest -s ./tests/test_tc_utils.py
+```
+
 
 ## Golang
 
 Dervied from the original code present in https://github.com/spiretechnology/go-timecode
 
+```bash
+cd go
+go test -v ./timecode/ -run TestTcConversion
+```
 
 ## Javascript
 
@@ -44,3 +55,13 @@ Derived from the original code present in https://github.com/spiretechnology/js-
 npm i jest
 npm run test
 ```
+
+
+## Testing
+
+The above tests test the following:
+
+- Generate time codes for labeling every fram in a span of 24 hours
+- Convert the timecodes to float time stamp
+- Convert the float time stamp back to timecode
+- Compare the original timecode with the converted timecode

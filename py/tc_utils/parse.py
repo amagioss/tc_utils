@@ -36,7 +36,7 @@ def FromFrame(frame: int, rate: Rate, drop_frame: bool) -> Timecode:
 
 
 def FromSeconds(seconds: float, rate: Rate) -> Timecode:
-    frame = round(seconds * float(rate.rate_str))
+    frame = round(seconds * rate.num /rate.den)
     drop_frame = rate.drop != 0 
 
     return Timecode(rate, frame, drop_frame)

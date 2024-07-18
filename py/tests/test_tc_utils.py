@@ -1,5 +1,6 @@
 
 import tc_utils 
+import pytest
 
 
 # def test_1():
@@ -9,42 +10,50 @@ import tc_utils
 #     tc = tc_utils.FromSeconds(time, tc_utils.Rate_29_97).String()
 #     print(tc)
 
+@pytest.mark.parametrize('framerate, sep', [
+    (tc_utils.Rate_29_97, ';'),
+    (tc_utils.Rate_59_94, ';'),
+    (tc_utils.Rate_23_976, ':'),
+    (tc_utils.Rate_30, ':'),
+])
+def test_tc_conversion(framerate, sep): 
+    nominal_fr = framerate.nominal
+    frame_num = 0
+    frame_num_in_nominal = 0
 
-def test_verify_29_97():
-    frame_num_in_30fps = 0
-    frame_num_in_29_97 = 0
+    for i in range(0, nominal_fr*60*60*24+1):
+        hh = int(frame_num_in_nominal/(3600 * nominal_fr))
+        mm = int((frame_num_in_nominal/(60 * nominal_fr)) % 60)
+        ss = int(((frame_num_in_nominal/nominal_fr) % 60))
+        ff = frame_num_in_nominal % nominal_fr
 
-    for i in range(0, 1800*60*24+1):
-        hh = int(frame_num_in_30fps/(3600 * 30))
-        mm = int((frame_num_in_30fps/(60 * 30)) % 60)
-        ss = int(((frame_num_in_30fps/30) % 60))
-        ff = frame_num_in_30fps % 30
+        timecode_str = f"{hh:02d}:{mm:02d}:{ss:02d}{sep}{ff:02d}"
 
-        timecode_str = f"{hh:02d}:{mm:02d}:{ss:02d};{ff:02d}"
+        derived_ts = tc_utils.ParseTimeStr(timecode_str, framerate)
 
-        drived_ts = tc_utils.ParseTimeStr(timecode_str, tc_utils.Rate_29_97)
-
-        derived_tc = tc_utils.GetTimeStr(drived_ts, tc_utils.SmpteTimecode, rate=tc_utils.Rate_29_97)
-
-        # print(frame_num_in_29_97, frame_num_in_30fps, timecode_str, drived_ts, derived_tc)
+        derived_tc = tc_utils.GetTimeStr(derived_ts, tc_utils.SmpteTimecode, rate=framerate)
 
         if timecode_str != derived_tc:
             print("Mismatch between actual and derived timecode:", timecode_str, derived_tc)
-            print("frame_num_in_30fps:", frame_num_in_30fps)
-            print("frame_num_in_29_97:", frame_num_in_29_97)
-            print("drived_ts:", drived_ts)
+            print("frame_num_in_nominal:", frame_num_in_nominal)
+            print("frame_num:", frame_num)
+            print("drived_ts:", derived_ts)
             raise
 
 
-        actual_ts = float(frame_num_in_29_97)/29.97
+        actual_ts = float((frame_num)*framerate.den)/framerate.num
+        # approximate actual_ts to 3 decimal places
+        # actual_ts = round(actual_ts, 3)
 
-        if abs(actual_ts - drived_ts) > 0.03:
-            print("Mismatch between actual and derived ts:", actual_ts, drived_ts)
+        if (derived_ts - actual_ts) > 0.02: # or (derived_ts > actual_ts):
+            print("Mismatch between actual and derived ts:", actual_ts, derived_ts)
+            print("frame_num_in_nominal:", frame_num_in_nominal)
+            print("frame_num:", frame_num)
 
-        frame_num_in_29_97 += 1
+        frame_num += 1
 
-        if (frame_num_in_30fps+1) % (30*60) == 0 and ((frame_num_in_30fps+1) % (30*60*10)) != 0:
-            frame_num_in_30fps += 3
+        if (frame_num_in_nominal+1) % (nominal_fr*60) == 0 and ((frame_num_in_nominal+1) % (nominal_fr*60*10)) != 0:
+            frame_num_in_nominal += (framerate.drop + 1) # 4 drop frames
         else:
-            frame_num_in_30fps += 1
-        
+            frame_num_in_nominal += 1
+

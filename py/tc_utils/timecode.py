@@ -36,13 +36,23 @@ class Timecode:
 
     def Seconds(self) -> float:
         if self.rate.rate_str == "29.97":
-            return float(self.frame) / 29.97 
+            return round(float(self.frame) * self.rate.den / self.rate.num, 3)
         elif self.rate.rate_str == "59.94":
-            return float(self.frame) / 59.94
+            return round(float(self.frame) * self.rate.den / self.rate.num, 3) 
         elif self.rate.rate_str == "23.976":
-            return float(self.frame) / 23.976
+            return round(float(self.frame) * self.rate.den / self.rate.num, 3)
         else:
-            return float(self.frame) / float(self.rate.nominal)
+            return round(float(self.frame) / float(self.rate.nominal), 3)
+
+    # def Seconds(self) -> float:
+    #     if self.rate.rate_str == "29.97":
+    #         return float(self.frame) / 29.97 
+    #     elif self.rate.rate_str == "59.94":
+    #         return float(self.frame) / 59.94
+    #     elif self.rate.rate_str == "23.976":
+    #         return float(self.frame) / 23.976
+    #     else:
+    #         return float(self.frame) / float(self.rate.nominal)
         
     def componentNDF(self, frame: int) -> Components:
         hh = frame // (3600 * self.rate.nominal)

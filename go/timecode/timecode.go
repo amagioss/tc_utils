@@ -28,16 +28,16 @@ func (t *Timecode) Frame() int64 {
 }
 
 func (t *Timecode) Seconds() float64 {
-	if !t.dropFrame {
+	if !t.dropFrame && t.rate.Str != "23.976" {
 		return float64(t.frame) / float64(t.rate.Nominal)
 	}
 	switch t.rate.Str {
 	case "29.97":
-		return float64(t.frame) / 29.97
+		return (float64(t.frame*int64(t.rate.Den)) / float64(t.rate.Num))
 	case "23.976":
-		return float64(t.frame) / 23.976
+		return (float64(t.frame*int64(t.rate.Den)) / float64(t.rate.Num))
 	case "59.94":
-		return float64(t.frame) / 59.94
+		return (float64(t.frame*int64(t.rate.Den)) / float64(t.rate.Num))
 	default:
 		return float64(t.frame) / float64(t.rate.Nominal)
 	}
@@ -71,8 +71,6 @@ func (t *Timecode) componentsDF(frame int64) Components {
 	// Calculate the NDF components
 	comps := t.componentsNDF(frame)
 
-	fmt.Println(frame, comps.Hours, comps.Minutes, comps.Seconds, comps.Frames)
-
 	// Count the total number of minutes crossed
 	minutesCrossed := comps.Hours*60 + comps.Minutes
 	dropFrameIncidents := minutesCrossed - minutesCrossed/10
@@ -96,7 +94,6 @@ func (t *Timecode) componentsDF(frame int64) Components {
 		// Update the components
 		comps = newComps
 	}
-	fmt.Println(frame, comps.Hours, comps.Minutes, comps.Seconds, comps.Frames)
 	return comps
 }
 

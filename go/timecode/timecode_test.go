@@ -174,41 +174,64 @@ func TestTimecodeSequenceDF(t *testing.T) {
 	}
 }
 
-func TestValidity(t *testing.T) {
-	frameNumIn30fps := 0
-	frameNumIn2997fps := 0
-	droppedFrames := 0
-	var diff float64
-	for i := 0; i < 1800*60*24; i++ {
-		diff = float64(frameNumIn30fps)/30. - (float64(frameNumIn2997fps) / 29.97)
-		timecodeStr := fmt.Sprintf("%02d:%02d:%02d;%02d", frameNumIn30fps/108000, (frameNumIn30fps/1800)%60, (frameNumIn30fps/30)%60, frameNumIn30fps%30)
+func TestTcConversion(t *testing.T) {
+	// 29.97
 
-		tc, _ := timecode.Parse(timecodeStr, timecode.Rate_29_97)
-		derivedTs := tc.Seconds()
-		// derivedTs := drop_timecode_to_timestamp(timecodeStr)
+	tests := map[string]struct {
+		FrameRate timecode.Rate
+		Sep       string
+	}{
+		"test_29_97":  {FrameRate: timecode.Rate_29_97, Sep: ";"},
+		"test_59_94":  {FrameRate: timecode.Rate_59_94, Sep: ";"},
+		"test_30":     {FrameRate: timecode.Rate_30, Sep: ":"},
+		"test_23_976": {FrameRate: timecode.Rate_23_976, Sep: ":"},
+	}
 
-		actualTime := float64(frameNumIn2997fps) / 29.97
+	for name, test := range tests {
+		t.Run(name, func(t *testing.T) {
+			nominal_fr := test.FrameRate.Nominal
+			frame_num_in_nominal := 0
+			frame_num := 0
 
-		derivedTimeCode := timecode.FromFrame(int64(frameNumIn2997fps), timecode.Rate_29_97, true).String()
-		// derivedTimeCode := timestamp_to_drop_timecode(actualTime)
+			for i := 0; i < nominal_fr*60*60*24+1; i++ {
+				hh := int(frame_num_in_nominal / (3600 * nominal_fr))
+				mm := int((frame_num_in_nominal / (60 * nominal_fr)) % 60)
+				ss := int(((frame_num_in_nominal / nominal_fr) % 60))
+				ff := frame_num_in_nominal % nominal_fr
 
-		// fmt.Printf("%d %.3f %s %.3f %s %.3f %d\n", frameNumIn2997fps, actualTime, timecode, derivedTs, derivedTimeCode, diff, droppedFrames)
+				timecode_str := fmt.Sprintf("%02d:%02d:%02d%s%02d", hh, mm, ss, test.Sep, ff)
 
-		if timecodeStr != derivedTimeCode {
-			fmt.Printf("Mismatch %d %.3f %s %.3f %s %.3f %d\n", frameNumIn2997fps, actualTime, timecodeStr, derivedTs, derivedTimeCode, diff, droppedFrames)
-		}
+				derived_ts, _ := timecode.ParseTimeStr(timecode_str, test.FrameRate)
 
-		if (actualTime - derivedTs) > 0.03 {
-			fmt.Printf("Mismatch %d %.3f %s %.3f %s %.3f %d\n", frameNumIn2997fps, actualTime, timecodeStr, derivedTs, derivedTimeCode, diff, droppedFrames)
-		}
+				derived_tc, _ := timecode.GetTimeStr(derived_ts, timecode.SmpteTimecode, test.FrameRate)
 
-		if (frameNumIn30fps+1)%1800 == 0 && ((frameNumIn30fps+1)%18000) != 0 {
-			frameNumIn30fps += 3
-			droppedFrames += 2
-		} else {
-			frameNumIn30fps++
-		}
-		frameNumIn2997fps++
+				//fmt.Println(timecode_str, derived_tc)
+
+				if timecode_str != derived_tc {
+					t.Errorf("Mismatch between actual and derived timecode: %s %s", timecode_str, derived_tc)
+					t.Errorf("frame_num_in_nominal: %d", frame_num_in_nominal)
+					t.Errorf("frame_num: %d", frame_num)
+					fmt.Println(timecode_str, derived_ts, derived_tc)
+				}
+
+				actual_ts := float64((frame_num)*test.FrameRate.Den) / float64(test.FrameRate.Num)
+
+				if (derived_ts - actual_ts) > 0.02 {
+					t.Errorf("Mismatch between actual and derived ts: %f %f", actual_ts, derived_ts)
+					t.Errorf("frame_num_in_nominal: %d", frame_num_in_nominal)
+					t.Errorf("frame_num: %d", frame_num)
+				}
+
+				frame_num += 1
+
+				if (frame_num_in_nominal+1)%(nominal_fr*60) == 0 && ((frame_num_in_nominal+1)%(nominal_fr*60*10)) != 0 {
+					frame_num_in_nominal += (test.FrameRate.Drop + 1)
+				} else {
+					frame_num_in_nominal += 1
+				}
+			}
+
+		})
 	}
 }
 
