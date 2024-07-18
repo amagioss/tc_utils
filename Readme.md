@@ -65,3 +65,9 @@ The above tests test the following:
 - Convert the timecodes to float time stamp
 - Convert the float time stamp back to timecode
 - Compare the original timecode with the converted timecode
+
+
+## Reference
+
+1. https://support.telestream.net/s/article/Time-code-for-23-976-frames-p
+2. http://www.andrewduncan.net/timecodes/ 
