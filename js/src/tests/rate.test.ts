@@ -7,7 +7,7 @@ import {
 	Rate_30,
 	Rate_59_94,
 	Rate_60,
-} from './rate';
+} from '../rate';
 
 describe('testing create framerate from fraction', () => {
 	test('frame rate from fraction', () => {

@@ -17,6 +17,15 @@ export class Timecode {
 		public readonly rate: Rate,
 		public readonly dropFrame: boolean
 	) {}
+	
+	public Seconds(): number {
+		const rateStr = this.rate.rateStr;
+		if (rateStr === "29.97" || rateStr === "59.94" || rateStr === "23.976") {
+		  return parseFloat((this.frame * this.rate.den / this.rate.num).toFixed(3));
+		} else {
+		  return parseFloat((this.frame / this.rate.nominal).toFixed(3));
+		}
+	  }
 
 	private getComponentsNDF(frame: number): Components {
 		// Track the remaining frames
