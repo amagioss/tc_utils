@@ -1,4 +1,5 @@
-const { SmpteTimecode, Rate_29_97, Rate_59_94, Rate_23_976, Rate_30, ParseTimeStr, GetTimeStr } = require('../src/index');
+import {Rate} from '../src/rate'
+const { SmpteTimecode, Rate_29_97, Rate_59_94, Rate_23_976, Rate_30, Rate_60, Rate_24, ParseTimeStr, GetTimeStr } = require('../src/index');
 
 describe('testing timecode', () => {
   const testCases = [
@@ -10,7 +11,6 @@ describe('testing timecode', () => {
 
   //i: 0 - 60*60*24*1
   testCases.forEach(({ framerate, sep }) => {
-    console.log("testing ok")
     test(`Timecode conversion at ${framerate.nominal} fps with separator '${sep}'`, () => {
       const nominal_fr = framerate.nominal;
       let frame_num = 0;
@@ -101,6 +101,40 @@ describe('testing timecode', () => {
 		expect(Math.abs(derived_ts - actual_ts)).toBeLessThanOrEqual(0.02);
       }
     });
+  })
+})
+
+describe('random timecode testing', () => {
+  const dfTimecodes = ["23:59:59;29", "00:10:00;02", "01:00:00;02", "01:01:01;01", "23:59:59;29", "00:59:59;29"];
+  const dfRates = [Rate_29_97, Rate_59_94]
+  
+  dfTimecodes.forEach((timecode: string) => {
+    dfRates.forEach((rate: Rate) => {
+      test(`df smpteTimecodes conversion test`, () => {
+        expect(GetTimeStr(ParseTimeStr(timecode, rate), SmpteTimecode, rate)).toBe(timecode);
+      });
+    })
+  })
+
+  const ndfTimecodes = ["23:59:59:29", "00:10:00:02", "01:00:00:02", "01:01:01:01", "23:59:59:29", "00:59:59:29"]
+  const ndfRates = [Rate_30, Rate_60]
+  ndfTimecodes.forEach((timecode: string) => {
+    ndfRates.forEach((rate: Rate) => {
+      test(`ndf smpteTimecodes conversion test`, () => {
+        expect(GetTimeStr(ParseTimeStr(timecode, rate), SmpteTimecode, rate)).toBe(timecode);
+      });
+    })
+  })
+
+  const timestamps = [600.066, 3600.066, 3661.034, 3599.966, 86399.966]
+  const expectedThreshold = 0.02;
+  const allRates = [Rate_29_97, Rate_59_94, Rate_30, Rate_60]
+  timestamps.forEach((timestamp: number) => {
+    allRates.forEach((rate: Rate) => {
+      test(`timestamps conversion test`, () => {
+        expect(Math.abs(ParseTimeStr(GetTimeStr(timestamp, SmpteTimecode, rate), rate) - timestamp)).toBeLessThanOrEqual(expectedThreshold);
+      });
+    })
   })
 })
 
