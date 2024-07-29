@@ -74,17 +74,17 @@ export function RateFromFraction(num: number, den: number): Rate {
 	};
 }
 
-export const Rate_23_976: Rate = {
-	nominal: 24,
-	drop: 0,
-	num: 24000,
-	den: 1001,
-	rateStr: "24"
-};
 export const Rate_24: Rate = {
 	nominal: 24,
 	drop: 0,
 	num: 24,
+	den: 1,
+	rateStr: "24"
+};
+export const Rate_25: Rate = {
+	nominal: 25,
+	drop: 0,
+	num: 25,
 	den: 1,
 	rateStr: "25"
 };
@@ -93,7 +93,7 @@ export const Rate_30: Rate = {
 	drop: 0,
 	num: 30,
 	den: 1,
-	rateStr: "29.97"
+	rateStr: "30"
 };
 export const Rate_29_97: Rate = {
 	nominal: 30,
@@ -102,6 +102,13 @@ export const Rate_29_97: Rate = {
 	den: 1001,
 	rateStr: "29.97"
 };
+export const Rate_50: Rate = {
+	nominal: 50,
+	drop: 0,
+	num: 50,
+	den: 1,
+	rateStr: "50"
+};
 export const Rate_60: Rate = {
 	nominal: 60,
 	drop: 0,
@@ -109,12 +116,20 @@ export const Rate_60: Rate = {
 	den: 1,
 	rateStr: "60"
 };
+
 export const Rate_59_94: Rate = {
 	nominal: 60,
 	drop: 4,
 	num: 60000,
 	den: 1001,
 	rateStr: "59.94"
+};
+export const Rate_23_976: Rate = {
+	nominal: 24,
+	drop: 0,
+	num: 24000,
+	den: 1001,
+	rateStr: "23.976"
 };
 
 export function GetPlaybackDurationMilliseconds(rate: Rate): number {
