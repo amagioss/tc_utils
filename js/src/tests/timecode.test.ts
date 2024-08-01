@@ -1,6 +1,6 @@
-import { Parse } from './parse';
-import { Rate_24, Rate_29_97, Rate_59_94 } from './rate';
-import { Timecode } from './timecode';
+import { Parse } from '../parse';
+import { Rate_24, Rate_29_97, Rate_59_94 } from '../rate';
+import { Timecode } from '../timecode';
 
 describe('testing 59.94 fps (DF) parse to frame count', () => {
 	test('parse DF timecode to frame count', () => {

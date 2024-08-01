@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import readline from 'readline';
-import { Parse } from './parse';
+import { Parse } from '../parse';
 import {
 	Rate,
 	Rate_23_976,
@@ -10,8 +10,8 @@ import {
 	Rate_30,
 	Rate_59_94,
 	Rate_60,
-} from './rate';
-import { Timecode } from './timecode';
+} from '../rate';
+import { Timecode } from '../timecode';
 
 async function runTimecodesTest(
 	rate: Rate,
@@ -20,7 +20,7 @@ async function runTimecodesTest(
 	maxFrames?: number
 ) {
 	const fileStream = fs.createReadStream(
-		path.resolve(__dirname, '../testdata', filename)
+		path.resolve(__dirname, '../../testdata', filename)
 	);
 	const rl = readline.createInterface({
 		input: fileStream,

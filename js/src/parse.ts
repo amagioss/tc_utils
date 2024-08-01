@@ -69,3 +69,10 @@ export function FromComponents(
 	// Return the timecode with the total frames
 	return new Timecode(totalFrames, rate, dropFrame);
 }
+
+export function FromSeconds(seconds: number, rate: Rate) {
+	const frame = Math.round(seconds * rate.num / rate.den);
+	const dropFrame = rate.drop !== 0;
+  
+	return new Timecode(frame, rate, dropFrame);
+  }
