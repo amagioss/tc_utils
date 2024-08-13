@@ -13,7 +13,7 @@ def ParseTimeStr(time_str, rate=None) -> float:
         tc_in_seconds = int(separated_tc[0]) * 3600 + \
                         int(separated_tc[1]) * 60 + \
                         int(separated_tc[2]) + \
-                        ((int(separated_tc[3]) + 500) / 1000) # rounding to the nearest millisecond
+                        (int(separated_tc[3]) / 1000) # rounding to the nearest millisecond
         return tc_in_seconds
     elif timecodeRegex.match(time_str):
         if rate is None:
@@ -29,7 +29,7 @@ def GetTimeStr(time_in_seconds: float, time_format, rate=None) -> str:
         hh = int(time_in_seconds) // 3600
         mm = (int(time_in_seconds) // 60) % 60
         ss = int(time_in_seconds) % 60
-        nnn = int((time_in_seconds - int(time_in_seconds)) * 1000)
+        nnn = int(round(time_in_seconds - int(time_in_seconds), 3) * 1000)
         return f"{hh:02d}:{mm:02d}:{ss:02d}.{nnn:03d}"
     elif time_format == SmpteTimecode:
         if rate is None:
