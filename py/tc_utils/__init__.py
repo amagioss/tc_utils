@@ -13,7 +13,7 @@ def ParseTimeStr(time_str, rate=None) -> float:
         tc_in_seconds = int(separated_tc[0]) * 3600 + \
                         int(separated_tc[1]) * 60 + \
                         int(separated_tc[2]) + \
-                        (int(separated_tc[3] + 500) / 1000) # rounding to the nearest millisecond
+                        ((int(separated_tc[3]) + 500) / 1000) # rounding to the nearest millisecond
         return tc_in_seconds
     elif timecodeRegex.match(time_str):
         if rate is None:

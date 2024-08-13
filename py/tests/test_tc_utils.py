@@ -16,22 +16,25 @@ import pytest
     (tc_utils.Rate_23_976, ':'),
     (tc_utils.Rate_30, ':'),
 ])
-def test_tc_conversion(framerate, sep): 
+def test_tc_conversion(framerate, sep,timestamp): 
     nominal_fr = framerate.nominal
     frame_num = 0
     frame_num_in_nominal = 0
-
+    
     for i in range(0, nominal_fr*60*60*24+1):
         hh = int(frame_num_in_nominal/(3600 * nominal_fr))
         mm = int((frame_num_in_nominal/(60 * nominal_fr)) % 60)
         ss = int(((frame_num_in_nominal/nominal_fr) % 60))
         ff = frame_num_in_nominal % nominal_fr
+        nnn = int((frame_num_in_nominal % nominal_fr) * (1000 / nominal_fr))  
 
         timecode_str = f"{hh:02d}:{mm:02d}:{ss:02d}{sep}{ff:02d}"
-
+        if sep == ".":
+            timecode_str = f"{hh:02d}:{mm:02d}:{ss:02d}{sep}{nnn:03d}"
+        
         derived_ts = tc_utils.ParseTimeStr(timecode_str, framerate)
 
-        derived_tc = tc_utils.GetTimeStr(derived_ts, tc_utils.SmpteTimecode, rate=framerate)
+        derived_tc = tc_utils.GetTimeStr(derived_ts, timestamp, rate=framerate)
 
         if timecode_str != derived_tc:
             print("Mismatch between actual and derived timecode:", timecode_str, derived_tc)
