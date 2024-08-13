@@ -17,14 +17,24 @@ export function ParseRate(str: string): Rate | null {
 			return Rate_23_976;
 		case '24':
 			return Rate_24;
+		case '24.0':
+			return Rate_24;
 		case '29.97':
 			return Rate_29_97;
 		case '30':
+			return Rate_30;
+		case '30.0':
 			return Rate_30;
 		case '59.94':
 			return Rate_59_94;
 		case '60':
 			return Rate_60;
+		case '60.0':
+			return Rate_60;
+		case '25':
+			return Rate_25;
+		case '25.0':
+				return Rate_25;
 		default:
 			return null;
 	}
