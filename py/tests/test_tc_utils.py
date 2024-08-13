@@ -10,11 +10,12 @@ import pytest
 #     tc = tc_utils.FromSeconds(time, tc_utils.Rate_29_97).String()
 #     print(tc)
 
-@pytest.mark.parametrize('framerate, sep', [
-    (tc_utils.Rate_29_97, ';'),
-    (tc_utils.Rate_59_94, ';'),
-    (tc_utils.Rate_23_976, ':'),
-    (tc_utils.Rate_30, ':'),
+@pytest.mark.parametrize('framerate, sep,timestamp', [
+    (tc_utils.Rate_29_97, ';',tc_utils.SmpteTimecode),
+    (tc_utils.Rate_59_94, ';',tc_utils.SmpteTimecode),
+    (tc_utils.Rate_23_976, ':',tc_utils.SmpteTimecode),
+    (tc_utils.Rate_30, ':',tc_utils.SmpteTimecode),
+    (tc_utils.Rate_59_94, '.',tc_utils.NormalTimestamp),
 ])
 def test_tc_conversion(framerate, sep,timestamp): 
     nominal_fr = framerate.nominal
