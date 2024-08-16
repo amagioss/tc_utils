@@ -3,18 +3,47 @@ import tc_utils
 import pytest
 
 
-# def test_1():
-#     frame = 3598
-#     time = 3598 / 29.97
+@pytest.mark.parametrize('input, expected', [
+    ("00:08:42:03", tc_utils.SmpteTimecodeNonDrop),
+    ("00:14:47:18", tc_utils.SmpteTimecodeNonDrop),
+    ("00:22:23;16", tc_utils.SmpteTimecodeDrop),
+    ("00:29:16;18", tc_utils.SmpteTimecodeDrop),
+    ("01:03:19.345", tc_utils.NormalTimestamp),
+    ("01:09:48.25", tc_utils.NormalTimestamp),
+    ("3456.789", tc_utils.FloatSeconds),
+    ("876.123", tc_utils.FloatSeconds),
+    ("5.678", tc_utils.FloatSeconds),])
+def test_tc_type(input, expected):
+    assert tc_utils.GetTimecodeType(input) == expected
 
-#     tc = tc_utils.FromSeconds(time, tc_utils.Rate_29_97).String()
-#     print(tc)
+@pytest.mark.parametrize('input, expected', [
+    ("00:08:42:03", 522.6221),
+    ("00:14:47:18", 888.4876),
+    ("00:22:23:16", 1344.8768666666667),
+    ("00:29:16:18", 1758.3566),
+    ("00:37:28:23", 2251.0154333333335),
+    ("00:44:17:05", 2659.8238333333334),
+    ("00:50:42:05", 3045.208833333333),
+    ("00:57:34:19", 3458.0879666666665),
+    ("01:03:19:21", 3803.4997),
+    ("01:09:48:16", 4192.721866666667),
+    ("01:17:41:10", 4665.9946666666665),
+    ("01:31:32:15", 5497.9925),])
+def test_ndf_29_97_tc(input, expected):
+    derived_ts = tc_utils.ParseTimeStr(input, tc_utils.Rate_29_97)
+    if abs(derived_ts - expected) > 0.001:
+        print("Mismatch between actual and derived ts:", derived_ts, expected)
+        print("input:", input)
+        raise
+    ndf_timecode = tc_utils.GetTimeStr(derived_ts, tc_utils.SmpteTimecodeNonDrop, rate=tc_utils.Rate_29_97)
+    assert ndf_timecode == input
+
 
 @pytest.mark.parametrize('framerate, sep, timestamp_format', [
-    (tc_utils.Rate_29_97, ';',tc_utils.SmpteTimecode),
-    (tc_utils.Rate_59_94, ';',tc_utils.SmpteTimecode),
-    (tc_utils.Rate_23_976, ':',tc_utils.SmpteTimecode),
-    (tc_utils.Rate_30, ':',tc_utils.SmpteTimecode),
+    (tc_utils.Rate_29_97, ';',tc_utils.SmpteTimecodeDrop),
+    (tc_utils.Rate_59_94, ';',tc_utils.SmpteTimecodeDrop),
+    (tc_utils.Rate_23_976, ':',tc_utils.SmpteTimecodeNonDrop),
+    (tc_utils.Rate_30, ':',tc_utils.SmpteTimecodeNonDrop),
     (tc_utils.Rate_29_97, '.',tc_utils.NormalTimestamp),
 ])
 def test_tc_conversion(framerate, sep, timestamp_format): 
