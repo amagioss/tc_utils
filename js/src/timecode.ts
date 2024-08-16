@@ -11,6 +11,9 @@ export interface Framer {
 	frame: number;
 }
 
+function truncate(f: number, n: number) {
+    return Math.floor(f * Math.pow(10, n)) / Math.pow(10, n);
+}
 export class Timecode {
 	public constructor(
 		public readonly frame: number,
@@ -21,9 +24,9 @@ export class Timecode {
 	public Seconds(): number {
 		const rateStr = this.rate.rateStr;
 		if (rateStr === "29.97" || rateStr === "59.94" || rateStr === "23.976") {
-		  return parseFloat((this.frame * this.rate.den / this.rate.num).toFixed(3));
+		  return truncate(parseFloat((this.frame * this.rate.den / this.rate.num).toFixed(3)), 5);
 		} else {
-		  return parseFloat((this.frame / this.rate.nominal).toFixed(3));
+		  return truncate(parseFloat((this.frame / this.rate.nominal).toFixed(3)), 5);
 		}
 	  }
 
