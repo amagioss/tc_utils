@@ -4,7 +4,7 @@ import pytest
 
 
 @pytest.mark.parametrize('input, expected', [
-    ("00:08:42:03", tc_utils.SmpteTimecodeNonDrop),
+    ("00:08:42:03", tc_utils.SmpteTimecodeNonDrop), 
     ("00:14:47:18", tc_utils.SmpteTimecodeNonDrop),
     ("00:22:23;16", tc_utils.SmpteTimecodeDrop),
     ("00:29:16;18", tc_utils.SmpteTimecodeDrop),
@@ -16,26 +16,33 @@ import pytest
 def test_tc_type(input, expected):
     assert tc_utils.GetTimecodeType(input) == expected
 
-@pytest.mark.parametrize('input, expected', [
-    ("00:08:42:03", 522.6221),
-    ("00:14:47:18", 888.4876),
-    ("00:22:23:16", 1344.8768666666667),
-    ("00:29:16:18", 1758.3566),
-    ("00:37:28:23", 2251.0154333333335),
-    ("00:44:17:05", 2659.8238333333334),
-    ("00:50:42:05", 3045.208833333333),
-    ("00:57:34:19", 3458.0879666666665),
-    ("01:03:19:21", 3803.4997),
-    ("01:09:48:16", 4192.721866666667),
-    ("01:17:41:10", 4665.9946666666665),
-    ("01:31:32:15", 5497.9925),])
-def test_ndf_29_97_tc(input, expected):
-    derived_ts = tc_utils.ParseTimeStr(input, tc_utils.Rate_29_97)
+
+# Test to convert given time code to non-drop frame timecode
+@pytest.mark.parametrize('input, rate, expected', [
+    ("00:08:42:03", tc_utils.Rate_29_97, 522.6221),  # 522.6221 = ((8*60*30+42*30+3)*1001/30000) for 29.97
+    ("00:14:47:18", tc_utils.Rate_29_97, 888.4876),
+    ("00:22:23:16", tc_utils.Rate_29_97, 1344.8768666666667),
+    ("00:29:16:18", tc_utils.Rate_29_97, 1758.3566),
+    ("00:37:28:23", tc_utils.Rate_29_97, 2251.0154333333335),
+    ("00:44:17:05", tc_utils.Rate_29_97, 2659.8238333333334),
+    ("00:50:42:05", tc_utils.Rate_29_97, 3045.208833333333),
+    ("00:57:34:19", tc_utils.Rate_29_97, 3458.0879666666665),
+    ("01:03:19:21", tc_utils.Rate_29_97, 3803.4997),
+    ("01:09:48:16", tc_utils.Rate_29_97, 4192.721866666667),
+    ("01:17:41:10", tc_utils.Rate_29_97, 4665.9946666666665),
+    ("01:31:32:15", tc_utils.Rate_29_97, 5497.9925),
+    ("01:39:23:23", tc_utils.Rate_30, 5963.7666), # 5963.7666 = ((3600*30)+(39*60*30)+(23*30)+23)/30
+    ("01:47:18:23", tc_utils.Rate_23_976, 6445.397291666667),  # 6445.397291666667 = (3600*24+47*60*24+18*24+23)*1001/24000
+    ("01:47:18:23", tc_utils.Rate_24, 6438.958333333333),  # 6438.958333333333 = (3600*24+47*60*24+18*24+23)/24
+    ("01:17:41:52", tc_utils.Rate_59_94, 4666.528533333333), # 4666.528533333333 = (3600*60+17*60*60+41*60+52)*1001/60000
+    ])
+def test_ndf_tc(input, rate, expected):
+    derived_ts = tc_utils.ParseTimeStr(input, rate)
     if abs(derived_ts - expected) > 0.001:
         print("Mismatch between actual and derived ts:", derived_ts, expected)
         print("input:", input)
         raise
-    ndf_timecode = tc_utils.GetTimeStr(derived_ts, tc_utils.SmpteTimecodeNonDrop, rate=tc_utils.Rate_29_97)
+    ndf_timecode = tc_utils.GetTimeStr(derived_ts, tc_utils.SmpteTimecodeNonDrop, rate=rate)
     assert ndf_timecode == input
 
 
