@@ -25,6 +25,8 @@ class Components:
     seconds: int
     frames: int
 
+def truncate(f, n):
+    return int(f * 10 ** n) / 10 ** n
 @dataclass
 class Timecode:
     rate: Rate
@@ -36,13 +38,13 @@ class Timecode:
 
     def Seconds(self) -> float:
         if self.rate.rate_str == "29.97":
-            return round(float(self.frame) * self.rate.den / self.rate.num, 3)
+            return truncate(float(self.frame) * self.rate.den / self.rate.num, 5)
         elif self.rate.rate_str == "59.94":
-            return round(float(self.frame) * self.rate.den / self.rate.num, 3) 
+            return truncate(float(self.frame) * self.rate.den / self.rate.num, 5)
         elif self.rate.rate_str == "23.976":
-            return round(float(self.frame) * self.rate.den / self.rate.num, 3)
+            return truncate(float(self.frame) * self.rate.den / self.rate.num, 5)
         else:
-            return round(float(self.frame) / float(self.rate.nominal), 3)
+            return truncate(float(self.frame) / float(self.rate.nominal), 5)
 
     # def Seconds(self) -> float:
     #     if self.rate.rate_str == "29.97":

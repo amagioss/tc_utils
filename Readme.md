@@ -17,6 +17,9 @@ can be in one of the following formats:
 ```python
 import tc_utils
 
+# Retruns: "smpte_timecode_nondrop"
+tc_utils.GetTimecodeType("01:02:03:04")
+
 # Returns: 4803.466666666666
 tc_utils.ParseTimeStr("01:20:03:14", tc_utils.Rate_30)
 
@@ -28,6 +31,7 @@ tc_utils.GetTimeStr(4803.470, tc_utils.SmpteTimecode, rate=tc_utils.Rate_29_97)
 
 # Returns: '01:20:03:14'
 tc_utils.GetTimeStr(4803.470, tc_utils.SmpteTimecode, rate=tc_utils.Rate_30) 
+
 ```
 
 **Test**

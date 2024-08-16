@@ -2,7 +2,7 @@ from tc_utils.timecode import Timecode, Rate, Components
 import re
 
 timecodeRegex = re.compile(r"(\d{2}):(\d{2}):(\d{2})([;:])(\d{2})")
-normaTimeRegex = re.compile(r"(\d{2}):(\d{2}):(\d{2})[.](\d{3})")
+normaTimeRegex = re.compile(r"(\d{2}):(\d{2}):(\d{2})[.](\d{1,3})")
 
 
 
@@ -35,8 +35,11 @@ def FromFrame(frame: int, rate: Rate, drop_frame: bool) -> Timecode:
     return Timecode(rate, frame, drop_frame)
 
 
-def FromSeconds(seconds: float, rate: Rate) -> Timecode:
+def FromSeconds(seconds: float, rate: Rate, timecode_format: str) -> Timecode:
     frame = round(seconds * rate.num /rate.den)
-    drop_frame = rate.drop != 0 
+    if timecode_format == "smpte_timecode_drop":
+        drop_frame = True
+    else: 
+        drop_frame = False
 
     return Timecode(rate, frame, drop_frame)
