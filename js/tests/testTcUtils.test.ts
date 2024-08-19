@@ -79,7 +79,7 @@ describe('testing timecode', () => {
           hh = parseInt((seconds / 3600).toString())
           mm = (parseInt((seconds / 60).toString())) % 60
           ss = parseInt(seconds.toString()) % 60
-          nnn = parseInt(parseFloat((parseFloat(((frameNum * framerate.den) / framerate.num).toFixed(3)) * 1000).toString()).toString()) % 1000
+          nnn = parseInt((((frameNum * framerate.den) / framerate.num) * 1000).toString()) % 1000
           timecodeStr = `${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}:${String(ss).padStart(2, '0')}${sep}${String(nnn).padStart(3, '0')}`;
         } else {
           hh = parseInt((frameNumInNominal/(3600 * nominalFr)).toString())
@@ -100,8 +100,7 @@ describe('testing timecode', () => {
         }
         
         const actualTs = parseFloat((frameNum * framerate.den).toString()) / framerate.num;
-        
-        if(Math.abs(derivedTs - actualTs) > 0.02 && timestampFormat != NormalTimestamp) {
+        if(Math.abs(derivedTs - actualTs) > 0.02) {
           console.error("Mismatch between actual and derived ts:", actualTs, derivedTs);
           console.error("frame_num_in_nominal:", frameNumInNominal)
           console.error("frame_num:", frameNum)
