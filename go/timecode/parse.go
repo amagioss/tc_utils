@@ -81,9 +81,13 @@ func FromFrame(frame int64, rate Rate, dropFrame bool) *Timecode {
 	}
 }
 
-func FromSeconds(seconds float64, rate Rate) *Timecode {
+func FromSeconds(seconds float64, rate Rate, timcodeFormat TimeFormat) *Timecode {
+	dropFrame := false
 	frame := int64((seconds * float64(rate.Num) / float64(rate.Den)) + 0.5)
-	dropFrame := rate.Drop > 0
+
+	if timcodeFormat == SmpteTimecodeDrop {
+		dropFrame = true
+	}
 
 	tc := FromFrame(frame, rate, dropFrame)
 

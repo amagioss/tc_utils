@@ -50,7 +50,7 @@ def GetTimeStr(time_in_seconds: float, time_format, rate=None) -> str:
         hh = int(time_in_seconds) // 3600
         mm = (int(time_in_seconds) // 60) % 60
         ss = int(time_in_seconds) % 60
-        nnn = int(round(time_in_seconds - int(time_in_seconds), 3) * 1000)
+        nnn = (round(time_in_seconds*1000)) % 1000
         return f"{hh:02d}:{mm:02d}:{ss:02d}.{nnn:03d}"
     elif time_format == SmpteTimecodeDrop or time_format == SmpteTimecodeNonDrop:
         if time_format == SmpteTimecodeDrop:

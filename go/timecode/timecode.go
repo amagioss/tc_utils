@@ -2,6 +2,7 @@ package timecode
 
 import (
 	"fmt"
+	"math"
 )
 
 type Components struct {
@@ -27,19 +28,21 @@ func (t *Timecode) Frame() int64 {
 	return t.frame
 }
 
+func truncate(f float64, precision int) float64 {
+	factor := math.Pow(10, float64(precision))
+	return float64(int(f*factor)) / factor
+}
+
 func (t *Timecode) Seconds() float64 {
-	if !t.dropFrame && t.rate.Str != "23.976" {
-		return float64(t.frame) / float64(t.rate.Nominal)
-	}
 	switch t.rate.Str {
 	case "29.97":
-		return (float64(t.frame*int64(t.rate.Den)) / float64(t.rate.Num))
+		return truncate(float64(t.frame*int64(t.rate.Den))/float64(t.rate.Num), 5)
 	case "23.976":
-		return (float64(t.frame*int64(t.rate.Den)) / float64(t.rate.Num))
+		return truncate(float64(t.frame*int64(t.rate.Den))/float64(t.rate.Num), 5)
 	case "59.94":
-		return (float64(t.frame*int64(t.rate.Den)) / float64(t.rate.Num))
+		return truncate(float64(t.frame*int64(t.rate.Den))/float64(t.rate.Num), 5)
 	default:
-		return float64(t.frame) / float64(t.rate.Nominal)
+		return truncate(float64(t.frame)/float64(t.rate.Nominal), 5)
 	}
 }
 
