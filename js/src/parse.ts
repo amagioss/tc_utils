@@ -70,9 +70,13 @@ export function FromComponents(
 	return new Timecode(totalFrames, rate, dropFrame);
 }
 
-export function FromSeconds(seconds: number, rate: Rate) {
+export function FromSeconds(seconds: number, rate: Rate, timecodeFormat: string) {
 	const frame = Math.round(seconds * rate.num / rate.den);
-	const dropFrame = rate.drop !== 0;
-  
+	let dropFrame = false;
+	if(timecodeFormat == "smpte_timecode_drop") {
+        dropFrame = true;
+	} else {
+		dropFrame = false;
+	}
 	return new Timecode(frame, rate, dropFrame);
   }
