@@ -35,6 +35,7 @@ function ParseTimeStr(timeStr: string, rate: Rate): number {
                         parseInt(separatedTc[1], 10) * 60 +
                         parseInt(separatedTc[2], 10) +
                         (parseInt(separatedTc[3], 10)) / 1000; // rounding to the nearest millisecond
+    // console.log(timeStr);
     return tcInSeconds;
   } else if (timecodeRegex.test(timeStr)) {
     if (!rate) {
@@ -65,6 +66,9 @@ function GetTimeStr(timeInSeconds: number, timeFormat: string, rate: Rate) {
     throw new Error("Invalid format");
   }
 }
-
+ParseTimeStr(
+  "00:00:02:00",
+  Rate_29_97,
+)?.toString()
 
 export { ParseTimeStr, GetTimeStr, GetTimecodeType, NormalTimestamp, SmpteTimecodeNonDrop, SmpteTimecodeDrop, floatSeconds };
