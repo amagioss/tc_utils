@@ -17,23 +17,23 @@ def test_initialization_with_timecode_str(setup_timecode_wrappers):
     assert tc1.to_seconds() == 60.0
 
 def test_initialization_with_seconds(setup_timecode_wrappers):
-    tc = TimecodeWrapper(24, start_frame=60)
+    tc = TimecodeWrapper(24, start_seconds=60)
     assert tc.to_string() == "00:01:00:00"
     assert tc.to_seconds() == 60.0
 
 def test_initialization_with_frames(setup_timecode_wrappers):
     tc = TimecodeWrapper(24, start_frame=60)
-    assert tc.to_string() == "00:01:00:00"
+    assert tc.to_string() == "00:00:02:12"
 
 def test_add_frames(setup_timecode_wrappers):
     tc1 = setup_timecode_wrappers["tc1"]
-    tc1 += 60
+    tc1 += (60 * 24)
     assert tc1.to_string() == "00:02:00:00"
     assert tc1.to_seconds() == 120.0
 
 def test_subtract_frames(setup_timecode_wrappers):
     tc1 = setup_timecode_wrappers["tc1"]
-    tc1 -= 60
+    tc1 -= (60 * 24)
     assert tc1.to_string() == "00:00:00:00"
     assert tc1.to_seconds() == 0.0
 

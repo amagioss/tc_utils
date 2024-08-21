@@ -1,5 +1,5 @@
 import re
-from .parse import ParseTimecode, FromSeconds, timecodeRegex, normaTimeRegex
+from .parse import ParseTimecode, FromSeconds, timecodeRegex, normaTimeRegex, ToFrame, FromFrame
 from .timecode import Rate, Timecode
 
 FloatSeconds = "float_seconds"
@@ -67,28 +67,36 @@ def GetTimeStr(time_in_seconds: float, time_format: str, rate: Rate = None) -> s
 
 class TimecodeWrapper:
     """This TimecodeWrapper class provides an abstraction to ease the use of tc_utils library"""
-    def __init__(self, rate_str: str, timecode_str: str = None, start_frame: int = 0, drop_frame: bool = False):
+    # TODO: add handler for seconds  
+    # refactor the TimecodeWrapperclass
+    def __init__(self, rate_str: str, timecode_str: str = None, start_frame: int = 0, start_seconds:float = 0.0,drop_frame: bool = False):
         self.rate = Rate.generate_rate(rate_str)
+        timecode_format = "smpte_timecode_drop" if not isinstance(rate_str, int) and self.rate else None
         self.drop_frame = drop_frame
-
         if timecode_str:
-            self.frame = ParseTimecode(timecode_str, rate=self.rate)
-        else:
+            self.timecode = ParseTimecode(timecode_str, rate=self.rate)
+            self.frame = ToFrame(self.timecode.Components(), self.rate, drop_frame)
+        elif start_frame != 0:
             self.frame = start_frame
+            self.timecode = FromFrame(self.frame, self.rate, drop_frame)
+        elif start_seconds != 0.0:
+            
+            self.timecode = FromSeconds(seconds=start_seconds, rate=self.rate,timecode_format=timecode_format )
+            self.frame = self.timecode.Frame()
 
         self.timecode = Timecode(rate=self.rate, frame=self.frame, drop_frame=self.drop_frame)
 
     def add_frames(self, frames: int) -> None:
-        self.timecode.add_frames(frames)
+        self.timecode.AddFrames(frames)
     
     def subtract_frames(self, frames: int) -> None:
-        self.timecode.subtract_frames(frames)
+        self.timecode.SubtractFrames(frames)
 
     def to_seconds(self) -> float:
-        return self.timecode.seconds()
+        return self.timecode.Seconds()
 
     def to_string(self) -> str:
-        return self.timecode.string()
+        return self.timecode.String()
 
     def __str__(self) -> str:
         return self.to_string()
@@ -107,19 +115,19 @@ class TimecodeWrapper:
     def __gt__(self, other: 'TimecodeWrapper') -> bool:
         if self.rate != other.rate:
             raise ValueError("Incompatible rates")
-        return self.frames > other.frames 
+        return self.frame > other.frame 
 
     def __lt__(self, other: 'TimecodeWrapper') -> bool:
         if self.rate != other.rate:
             raise ValueError("Incompatible rates")
-        return self.frames < other.frames 
+        return self.frame < other.frame
 
     def __ge__(self, other: 'TimecodeWrapper') -> bool:
         if self.rate != other.rate:
             raise ValueError("Incompatible rates")
-        return self.frames >= other.frames 
+        return self.frame >= other.frame 
 
     def __le__(self, other: 'TimecodeWrapper') -> bool:
         if self.rate != other.rate:
             raise ValueError("Incompatible rates")
-        return self.frames <= other.frames 
+        return self.frame <= other.frame

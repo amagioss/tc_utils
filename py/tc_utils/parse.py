@@ -28,6 +28,7 @@ def ToFrame(components: Components, rate: Rate, drop_frame: bool) -> int:
         drop_frame_incidents = total_minutes - (total_minutes // 10)
         if drop_frame_incidents > 0:
             total_frames -= (drop_frame_incidents * rate.drop)
+    return total_frames
 
 def FromFrame(frame: int, rate: Rate, drop_frame: bool) -> Timecode:
     return Timecode(rate, frame, drop_frame)
