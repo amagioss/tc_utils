@@ -71,21 +71,24 @@ class TimecodeWrapper:
     # refactor the TimecodeWrapperclass
     def __init__(self, rate_str: str, timecode_str: str = None, start_frame: int = 0, start_seconds:float = 0.0,drop_frame: bool = False):
         self.rate = Rate.generate_rate(rate_str)
-        timecode_format = "smpte_timecode_drop" if not isinstance(rate_str, int) and self.rate else None
         self.drop_frame = drop_frame
-        if timecode_str:
-            self.timecode = ParseTimecode(timecode_str, rate=self.rate)
-            self.frame = ToFrame(self.timecode.Components(), self.rate, drop_frame)
-        elif start_frame != 0:
-            self.frame = start_frame
-            self.timecode = FromFrame(self.frame, self.rate, drop_frame)
-        elif start_seconds != 0.0:
-            
-            self.timecode = FromSeconds(seconds=start_seconds, rate=self.rate,timecode_format=timecode_format )
-            self.frame = self.timecode.Frame()
-
+        self.frame = self._initialize_frame(timecode_str, start_frame, start_seconds)
         self.timecode = Timecode(rate=self.rate, frame=self.frame, drop_frame=self.drop_frame)
-
+    
+    def _initialize_frame(self, timecode_str: str, start_frame: int, start_seconds: float) -> int:
+        """Initializes the frame based on input parameters."""
+        if timecode_str:
+            timecode = ParseTimecode(timecode_str, rate=self.rate)
+            return ToFrame(timecode.Components(), self.rate, self.drop_frame)
+        elif start_frame != 0:
+            return start_frame
+        elif start_seconds != 0.0:
+            timecode_format = "smpte_timecode_drop" if not isinstance(self.rate, int) else None
+            timecode = FromSeconds(seconds=start_seconds, rate=self.rate, timecode_format=timecode_format)
+            return timecode.Frame()
+        else:
+            return 0
+         
     def add_frames(self, frames: int) -> None:
         self.timecode.AddFrames(frames)
     
