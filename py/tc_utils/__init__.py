@@ -68,7 +68,6 @@ def GetTimeStr(time_in_seconds: float, time_format: str, rate: Rate = None) -> s
 class TimecodeWrapper:
     """This TimecodeWrapper class provides an abstraction to ease the use of tc_utils library"""
     # TODO: add handler for seconds  
-    # refactor the TimecodeWrapperclass
     def __init__(self, rate_str: str, timecode_str: str = None, start_frame: int = 0, start_seconds:float = 0.0,drop_frame: bool = False):
         self.rate = Rate.generate_rate(rate_str)
         self.drop_frame = drop_frame
