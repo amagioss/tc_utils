@@ -9,7 +9,7 @@ class Rate:
     num: int
     den: int
 
-	def generate_rate(rate_str):
+    def generate_rate(rate_str):
         if rate_str == "23.976":
             return Rate("23.976", 24, 0, 24000, 1001)
         elif rate_str == "59.94":

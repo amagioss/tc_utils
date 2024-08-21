@@ -7,13 +7,13 @@ NormalTimestamp = "normal_timestamp"
 SmpteTimecodeNonDrop = "smpte_timecode_nondrop"
 SmpteTimecodeDrop = "smpte_timecode_drop"
 
-Rate_24 = Rate.generate_rate("24")
-Rate_25 = Rate.generate_rate("25")
-Rate_30 = Rate.generate_rate("30")
+Rate_24 = Rate.generate_rate(24)
+Rate_25 = Rate.generate_rate(25)
+Rate_30 = Rate.generate_rate(30)
 Rate_29_97 = Rate.generate_rate("29.97")
-Rate_50 = Rate.generate_rate("50")
+Rate_50 = Rate.generate_rate(50)
 Rate_59_94 = Rate.generate_rate("59.94")
-Rate_60 = Rate.generate_rate("60")
+Rate_60 = Rate.generate_rate(60)
 Rate_23_976 = Rate.generate_rate("23.976")
 
 def GetTimecodeType(time_str: str) -> str:
@@ -105,13 +105,21 @@ class TimecodeWrapper:
         return self
 
     def __gt__(self, other: 'TimecodeWrapper') -> bool:
-        return self.timecode > other.timecode
+        if self.rate != other.rate:
+            raise ValueError("Incompatible rates")
+        return self.frames > other.frames 
 
     def __lt__(self, other: 'TimecodeWrapper') -> bool:
-        return self.timecode < other.timecode
+        if self.rate != other.rate:
+            raise ValueError("Incompatible rates")
+        return self.frames < other.frames 
 
     def __ge__(self, other: 'TimecodeWrapper') -> bool:
-        return self.timecode >= other.timecode
+        if self.rate != other.rate:
+            raise ValueError("Incompatible rates")
+        return self.frames >= other.frames 
 
     def __le__(self, other: 'TimecodeWrapper') -> bool:
-        return self.timecode <= other.timecode
+        if self.rate != other.rate:
+            raise ValueError("Incompatible rates")
+        return self.frames <= other.frames 

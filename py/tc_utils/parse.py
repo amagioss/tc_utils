@@ -7,7 +7,7 @@ normaTimeRegex = re.compile(r"(\d{2}):(\d{2}):(\d{2})[.](\d{1,3})")
 
 
 def FromComponents(components: Components, rate: Rate, drop_frame: bool) -> Timecode:
-	total_frames = ToFrames(components, rate, drop_frame)
+    total_frames = ToFrame(components, rate, drop_frame)
     return Timecode(rate, total_frames, drop_frame)
 
 def ParseTimecode(timecode: str, rate: Rate) -> Timecode: 
@@ -18,7 +18,7 @@ def ParseTimecode(timecode: str, rate: Rate) -> Timecode:
     raise ValueError("Invalid timecode format")
     
 def ToFrame(components: Components, rate: Rate, drop_frame: bool) -> int:
-	if drop_frame and (components.minutes % 10 >0 ) and components.seconds == 0 and components.frames < rate.drop:
+    if drop_frame and (components.minutes % 10 >0 ) and components.seconds == 0 and components.frames < rate.drop:
         components.frames = rate.drop
 
     total_minutes = components.hours * 60 + components.minutes
