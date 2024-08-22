@@ -2,7 +2,7 @@
   "name": "@amagioss/js-timecode",
   "version": "1.0.0",
   "description": "",
-  "main": "js/dist/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "build:check": "tsc -p tsconfig.json --noEmit",
