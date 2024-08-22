@@ -4,14 +4,15 @@
   "description": "",
   "main": "js/dist/index.js",
   "scripts": {
-    "build": "tsc -p js/tsconfig.json",
-    "build:check": "tsc -p js/tsconfig.json --noEmit",
+    "build": "tsc -p tsconfig.json",
+    "build:check": "tsc -p tsconfig.json --noEmit",
     "lint": "prettier --write .",
     "lint:check": "prettier --check .",
-    "test": "jest --config js/jest.config.js",
+    "test": "jest --config jest.config.js",
     "docs": "typedoc --excludePrivate --excludeProtected js/src/index.ts",
-    "clean": "rm -rf js/dist",
-    "prepare": "npm run clean && npm run build"
+    "clean": "rm -rf dist",
+    "prepare": "npm run clean && npm run build",
+    "start": "ts-node"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +22,7 @@
     "jest": "^29.7.0",
     "prettier": "^2.8.8",
     "ts-jest": "^29.1.0",
+    "ts-node": "^10.9.2",
     "typedoc": "^0.24.8",
     "typescript": "^5.1.3"
   }

@@ -1,4 +1,4 @@
-import { GetPlaybackDurationMilliseconds, Rate } from './rate';
+import { getPlaybackDurationMilliseconds, Rate } from './rate';
 
 export interface Components {
 	hours: number;
@@ -21,7 +21,7 @@ export class Timecode {
 		public readonly dropFrame: boolean
 	) {}
 	
-	public Seconds(): number {
+	public seconds(): number {
 		const rateStr = this.rate.rateStr;
 		if (rateStr === "29.97" || rateStr === "59.94" || rateStr === "23.976") {
 		  return truncate(parseFloat((this.frame * this.rate.den / this.rate.num).toFixed(3)), 5);
@@ -163,6 +163,6 @@ export class Timecode {
 	// presentationTimeMilliseconds gets the actual presentation time of the timecode. With drop frame, this will drift from the timecode
 	// time before snapping back into place periodically.
 	public presentationTimeMilliseconds(): number {
-		return GetPlaybackDurationMilliseconds(this.rate) * this.frame;
+		return getPlaybackDurationMilliseconds(this.rate) * this.frame;
 	}
 }

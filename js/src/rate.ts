@@ -10,7 +10,7 @@ export interface Rate {
 	rateStr: string;
 }
 
-export function ParseRate(str: string): Rate | null {
+export function parseRate(str: string): Rate | null {
 	switch (str) {
 		case '23.976':
 		case '23.98':
@@ -40,7 +40,7 @@ export function ParseRate(str: string): Rate | null {
 	}
 }
 
-export function RateFromFraction(num: number, den: number): Rate {
+export function rateFromFraction(num: number, den: number): Rate {
 	if (num === 24000 && den === 1001) {
 		return Rate_23_976;
 	} else if (num === 24 && den === 1) {
@@ -142,6 +142,6 @@ export const Rate_23_976: Rate = {
 	rateStr: "23.976"
 };
 
-export function GetPlaybackDurationMilliseconds(rate: Rate): number {
+export function getPlaybackDurationMilliseconds(rate: Rate): number {
 	return (rate.den / rate.num) * 1000;
 }

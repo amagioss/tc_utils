@@ -2,12 +2,12 @@ import { Rate } from './rate';
 import { Components, Timecode } from './timecode';
 
 // TimecodeRegex is the pattern for a valid SMPTE timecode
-const TimecodeRegex = /^(\d\d)(:|;)(\d\d)(:|;)(\d\d)(:|;)(\d+)$/;
+const timecodeRegex = /^(\d\d)(:|;)(\d\d)(:|;)(\d\d)(:|;)(\d+)$/;
 
 // Parse parses a timecode from a string, and treats it using the provided frame rate value
-export function Parse(timecode: string, rate: Rate): Timecode {
+export function parse(timecode: string, rate: Rate): Timecode {
 	// Match it against the regular expression
-	const match = timecode.match(TimecodeRegex);
+	const match = timecode.match(timecodeRegex);
 	if (!match) {
 		throw new Error('invalid timecode format');
 	}
@@ -22,7 +22,7 @@ export function Parse(timecode: string, rate: Rate): Timecode {
 	const dropFrame = match[6] === ';';
 
 	// Combine the components
-	return FromComponents(
+	return fromComponents(
 		{
 			hours,
 			minutes,
@@ -34,7 +34,7 @@ export function Parse(timecode: string, rate: Rate): Timecode {
 	);
 }
 
-export function FromComponents(
+export function fromComponents(
 	components: Components,
 	rate: Rate,
 	dropFrame: boolean
@@ -70,7 +70,7 @@ export function FromComponents(
 	return new Timecode(totalFrames, rate, dropFrame);
 }
 
-export function FromSeconds(seconds: number, rate: Rate, timecodeFormat: string) {
+export function fromSeconds(seconds: number, rate: Rate, timecodeFormat: string) {
 	const frame = Math.round(seconds * rate.num / rate.den);
 	let dropFrame = false;
 	if(timecodeFormat == "smpte_timecode_drop") {

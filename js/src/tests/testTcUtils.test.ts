@@ -1,48 +1,48 @@
-const { SmpteTimecodeNonDrop, SmpteTimecodeDrop, floatSeconds, NormalTimestamp, Rate_24, Rate_29_97, Rate_59_94, Rate_23_976, Rate_30, ParseTimeStr, GetTimeStr, GetTimecodeType } = require('../src/index');
+import  * as tcUtils from '../index';
 
 describe('Test Timecode Type', () => {
   const testCases = [
-      ["00:08:42:03", SmpteTimecodeNonDrop],
-      ["00:14:47:18", SmpteTimecodeNonDrop],
-      ["00:22:23;16", SmpteTimecodeDrop],
-      ["00:29:16;18", SmpteTimecodeDrop],
-      ["01:03:19.345", NormalTimestamp],
-      ["01:09:48.25", NormalTimestamp],
-      ["3456.789", floatSeconds],
-      ["876.123", floatSeconds],
-      ["5.678", floatSeconds]
+      ["00:08:42:03", tcUtils.smpteTimecodeNonDrop],
+      ["00:14:47:18", tcUtils.smpteTimecodeNonDrop],
+      ["00:22:23;16", tcUtils.smpteTimecodeDrop],
+      ["00:29:16;18", tcUtils.smpteTimecodeDrop],
+      ["01:03:19.345", tcUtils.normalTimestamp],
+      ["01:09:48.25", tcUtils.normalTimestamp],
+      ["3456.789", tcUtils.floatSeconds],
+      ["876.123", tcUtils.floatSeconds],
+      ["5.678", tcUtils.floatSeconds]
   ];
 
   testCases.forEach(([input, expected]) => {
       test(`should return ${expected} for input ${input}`, () => {
-          expect(GetTimecodeType(input)).toBe(expected);
+          expect(tcUtils.getTimecodeType(input)).toBe(expected);
       });
   });
 });
 
 describe('Non-Drop Frame Timecode Tests', () => {
-    const testCases = [
-        ["00:08:42:03", Rate_29_97, 522.6221],
-        ["00:14:47:18", Rate_29_97, 888.4876],
-        ["00:22:23:16", Rate_29_97, 1344.8768666666667],
-        ["00:29:16:18", Rate_29_97, 1758.3566],
-        ["00:37:28:23", Rate_29_97, 2251.0154333333335],
-        ["00:44:17:05", Rate_29_97, 2659.8238333333334],
-        ["00:50:42:05", Rate_29_97, 3045.208833333333],
-        ["00:57:34:19", Rate_29_97, 3458.0879666666665],
-        ["01:03:19:21", Rate_29_97, 3803.4997],
-        ["01:09:48:16", Rate_29_97, 4192.721866666667],
-        ["01:17:41:10", Rate_29_97, 4665.9946666666665],
-        ["01:31:32:15", Rate_29_97, 5497.9925],
-        ["01:39:23:23", Rate_30, 5963.7666],
-        ["01:47:18:23", Rate_23_976, 6445.397291666667],
-        ["01:47:18:23", Rate_24, 6438.958333333333],
-        ["01:17:41:52", Rate_59_94, 4666.528533333333],
+    const testCases: any = [
+        ["00:08:42:03", tcUtils.Rate_29_97, 522.6221],
+        ["00:14:47:18", tcUtils.Rate_29_97, 888.4876],
+        ["00:22:23:16", tcUtils.Rate_29_97, 1344.8768666666667],
+        ["00:29:16:18", tcUtils.Rate_29_97, 1758.3566],
+        ["00:37:28:23", tcUtils.Rate_29_97, 2251.0154333333335],
+        ["00:44:17:05", tcUtils.Rate_29_97, 2659.8238333333334],
+        ["00:50:42:05", tcUtils.Rate_29_97, 3045.208833333333],
+        ["00:57:34:19", tcUtils.Rate_29_97, 3458.0879666666665],
+        ["01:03:19:21", tcUtils.Rate_29_97, 3803.4997],
+        ["01:09:48:16", tcUtils.Rate_29_97, 4192.721866666667],
+        ["01:17:41:10", tcUtils.Rate_29_97, 4665.9946666666665],
+        ["01:31:32:15", tcUtils.Rate_29_97, 5497.9925],
+        ["01:39:23:23", tcUtils.Rate_30, 5963.7666],
+        ["01:47:18:23", tcUtils.Rate_23_976, 6445.397291666667],
+        ["01:47:18:23", tcUtils.Rate_24, 6438.958333333333],
+        ["01:17:41:52", tcUtils.Rate_59_94, 4666.528533333333],
     ];
 
-    testCases.forEach(([input, rate, expected]) => {
+    testCases.forEach(([input, rate, expected] : any) => {
         test(`should correctly derive timestamp for ${input} at rate ${rate}`, () => {
-            const derived_ts = ParseTimeStr(input, rate);
+            const derived_ts = tcUtils.parseTimeStr(input, rate);
             
             // Compare derived timestamp with expected
             const tolerance = 0.001;
@@ -52,7 +52,7 @@ describe('Non-Drop Frame Timecode Tests', () => {
                 throw new Error("Timestamp mismatch");
             }
 
-            const ndf_timecode = GetTimeStr(derived_ts, SmpteTimecodeNonDrop, rate);
+            const ndf_timecode = tcUtils.getTimeStr(derived_ts, tcUtils.smpteTimecodeNonDrop, rate);
             expect(ndf_timecode).toBe(input);
         });
     });
@@ -61,11 +61,11 @@ describe('Non-Drop Frame Timecode Tests', () => {
 
 describe('testing timecode', () => {
   const testCases = [
-    { framerate: Rate_29_97, sep: ';', timestampFormat: SmpteTimecodeDrop },
-    { framerate: Rate_59_94, sep: ';', timestampFormat: SmpteTimecodeDrop },
-    { framerate: Rate_23_976, sep: ':', timestampFormat: SmpteTimecodeNonDrop },
-    { framerate: Rate_30, sep: ':', timestampFormat: SmpteTimecodeNonDrop },
-    { framerate: Rate_29_97, sep: '.', timestampFormat: NormalTimestamp}
+    { framerate: tcUtils.Rate_29_97, sep: ';', timestampFormat: tcUtils.smpteTimecodeDrop },
+    { framerate: tcUtils.Rate_59_94, sep: ';', timestampFormat: tcUtils.smpteTimecodeDrop },
+    { framerate: tcUtils.Rate_23_976, sep: ':', timestampFormat: tcUtils.smpteTimecodeNonDrop },
+    { framerate: tcUtils.Rate_30, sep: ':', timestampFormat: tcUtils.smpteTimecodeNonDrop },
+    { framerate: tcUtils.Rate_29_97, sep: '.', timestampFormat: tcUtils.normalTimestamp}
   ];
   testCases.forEach(({ framerate, sep, timestampFormat }) => {
     test(`Timecode conversion at ${framerate.nominal} fps with separator '${sep}'`, () => {
@@ -74,7 +74,7 @@ describe('testing timecode', () => {
       let frameNumInNominal = 0;
       for(let i = 0; i <= nominalFr * 60 * 60 * 24 + 1 ; i++) {
         let seconds, hh, mm, ss, nnn, timecodeStr, ff;
-        if(timestampFormat == NormalTimestamp) {
+        if(timestampFormat == tcUtils.normalTimestamp) {
           seconds = (frameNum * framerate.den) / framerate.num
           hh = parseInt((seconds / 3600).toString())
           mm = (parseInt((seconds / 60).toString())) % 60
@@ -88,8 +88,8 @@ describe('testing timecode', () => {
           ff = frameNumInNominal % nominalFr
           timecodeStr = `${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}:${String(ss).padStart(2, '0')}${sep}${String(ff).padStart(2, '0')}`;
         }
-        const derivedTs = ParseTimeStr(timecodeStr, framerate);
-        const derivedTc = GetTimeStr(derivedTs, timestampFormat, framerate);
+        const derivedTs = tcUtils.parseTimeStr(timecodeStr, framerate);
+        const derivedTc = tcUtils.getTimeStr(derivedTs, timestampFormat, framerate);
 
         if (timecodeStr != derivedTc) {
           console.log("Mismatch between actual and derived timecode:", timecodeStr, derivedTc);
