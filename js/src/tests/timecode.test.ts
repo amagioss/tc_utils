@@ -1,12 +1,12 @@
-import { Parse } from '../parse';
+import { parse } from '../parse';
 import { Rate_24, Rate_29_97, Rate_59_94 } from '../rate';
 import { Timecode } from '../timecode';
 
 describe('testing 59.94 fps (DF) parse to frame count', () => {
 	test('parse DF timecode to frame count', () => {
-		expect(Parse('00:00:00;00', Rate_59_94).frame).toBe(0);
-		expect(Parse('00:00:01;00', Rate_59_94).frame).toBe(60);
-		expect(Parse('00:01:00;04', Rate_59_94).frame).toBe(60 * 60);
+		expect(parse('00:00:00;00', Rate_59_94).frame).toBe(0);
+		expect(parse('00:00:01;00', Rate_59_94).frame).toBe(60);
+		expect(parse('00:01:00;04', Rate_59_94).frame).toBe(60 * 60);
 	});
 });
 
@@ -26,40 +26,40 @@ describe('testing 59.94 fps (DF) format from frame count', () => {
 
 describe('testing 59.94 fps (DF) parse and format', () => {
 	test('parse and format timecodes without change', () => {
-		expect(Parse('00:00:00;00', Rate_59_94).toString()).toBe('00:00:00;00');
-		expect(Parse('00:00:01;00', Rate_59_94).toString()).toBe('00:00:01;00');
-		expect(Parse('00:00:10;00', Rate_59_94).toString()).toBe('00:00:10;00');
-		expect(Parse('00:01:00;04', Rate_59_94).toString()).toBe('00:01:00;04');
-		expect(Parse('14:55:41;22', Rate_59_94).toString()).toBe('14:55:41;22');
-		expect(Parse('14:00:41;22', Rate_59_94).toString()).toBe('14:00:41;22');
-		expect(Parse('10:55:41;00', Rate_59_94).toString()).toBe('10:55:41;00');
-		expect(Parse('14:55:41;22', Rate_59_94).toString()).toBe('14:55:41;22');
-		expect(Parse('14:55:04;22', Rate_59_94).toString()).toBe('14:55:04;22');
-		expect(Parse('13:15:00;40', Rate_59_94).toString()).toBe('13:15:00;40');
+		expect(parse('00:00:00;00', Rate_59_94).toString()).toBe('00:00:00;00');
+		expect(parse('00:00:01;00', Rate_59_94).toString()).toBe('00:00:01;00');
+		expect(parse('00:00:10;00', Rate_59_94).toString()).toBe('00:00:10;00');
+		expect(parse('00:01:00;04', Rate_59_94).toString()).toBe('00:01:00;04');
+		expect(parse('14:55:41;22', Rate_59_94).toString()).toBe('14:55:41;22');
+		expect(parse('14:00:41;22', Rate_59_94).toString()).toBe('14:00:41;22');
+		expect(parse('10:55:41;00', Rate_59_94).toString()).toBe('10:55:41;00');
+		expect(parse('14:55:41;22', Rate_59_94).toString()).toBe('14:55:41;22');
+		expect(parse('14:55:04;22', Rate_59_94).toString()).toBe('14:55:04;22');
+		expect(parse('13:15:00;40', Rate_59_94).toString()).toBe('13:15:00;40');
 	});
 });
 
 describe('testing 59.94 fps (DF) add playback seconds', () => {
 	test('add zero to start timecode', () => {
 		expect(
-			Parse('17:01:53;58', Rate_59_94).addPlaybackSeconds(0).toString()
+			parse('17:01:53;58', Rate_59_94).addPlaybackSeconds(0).toString()
 		).toBe('17:01:53;58');
 	});
 });
 
 describe('testing 59.94 fps (DF) frame increment', () => {
 	test('adding one frame to start timecode', () => {
-		expect(Parse('14:55:41;22', Rate_59_94).add(1).toString()).toBe(
+		expect(parse('14:55:41;22', Rate_59_94).add(1).toString()).toBe(
 			'14:55:41;23'
 		);
-		expect(Parse('14:56:59;59', Rate_59_94).add(1).toString()).toBe(
+		expect(parse('14:56:59;59', Rate_59_94).add(1).toString()).toBe(
 			'14:57:00;04'
 		);
 	});
 });
 
 describe('testing 59.94 fps (DF) offsets', () => {
-	const start = Parse('14:55:41;22', Rate_59_94);
+	const start = parse('14:55:41;22', Rate_59_94);
 	test('adding ten seconds to start timecode', () => {
 		expect(start.addSeconds(10).toString()).toBe('14:55:51;22');
 	});
@@ -72,7 +72,7 @@ describe('testing 59.94 fps (DF) offsets', () => {
 });
 
 describe('testing 24 fps (NDF) offsets', () => {
-	const start = Parse('14:55:41:22', Rate_24);
+	const start = parse('14:55:41:22', Rate_24);
 	test('adding one minute to start timecode', () => {
 		const oneMinuteLater = start.addSeconds(60);
 		expect(oneMinuteLater.toString()).toBe('14:56:41:22');
@@ -89,12 +89,12 @@ describe('testing 24 fps (NDF) offsets', () => {
 
 describe('readme example tests', () => {
 	test('parse a timecode (drop frame)', () => {
-		const tc = Parse('00:01:02;23', Rate_29_97);
+		const tc = parse('00:01:02;23', Rate_29_97);
 		expect(tc.toString()).toBe('00:01:02;23');
 		expect(tc.frame).toBe(1881);
 	});
 	test('parse a timecode (non-drop frame)', () => {
-		const tc = Parse('00:01:02:23', Rate_24);
+		const tc = parse('00:01:02:23', Rate_24);
 		expect(tc.toString()).toBe('00:01:02:23');
 		expect(tc.frame).toBe(1511);
 	});
@@ -104,7 +104,7 @@ describe('readme example tests', () => {
 		expect(tc.frame).toBe(1511);
 	});
 	test('algebra with timecodes and frames', () => {
-		let tc = Parse('00:01:02:23', Rate_24);
+		let tc = parse('00:01:02:23', Rate_24);
 		tc = tc.add(3);
 		expect(tc.toString()).toBe('00:01:03:02');
 		expect(tc.frame).toBe(1514);

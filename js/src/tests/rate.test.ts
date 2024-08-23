@@ -1,6 +1,6 @@
 import {
 	Rate,
-	RateFromFraction,
+	rateFromFraction,
 	Rate_23_976,
 	Rate_24,
 	Rate_29_97,
@@ -20,7 +20,7 @@ describe('testing create framerate from fraction', () => {
 			[60000, 1001, Rate_59_94],
 		];
 		for (const [num, den, expected] of cases) {
-			const rate = RateFromFraction(num, den);
+			const rate = rateFromFraction(num, den);
 			expect(rate.num).toBe(expected.num);
 			expect(rate.den).toBe(expected.den);
 			expect(rate.nominal).toBe(expected.nominal);
@@ -37,7 +37,7 @@ describe('testing create framerate from fraction', () => {
 			Rate_59_94,
 		];
 		for (const rate of cases) {
-			const newRate = RateFromFraction(rate.num, rate.den);
+			const newRate = rateFromFraction(rate.num, rate.den);
 			expect(newRate.num).toBe(rate.num);
 			expect(newRate.den).toBe(rate.den);
 			expect(newRate.nominal).toBe(rate.nominal);

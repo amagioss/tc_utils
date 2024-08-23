@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import readline from 'readline';
-import { Parse } from '../parse';
+import { parse } from '../parse';
 import {
 	Rate,
 	Rate_23_976,
@@ -39,7 +39,7 @@ async function runTimecodesTest(
 		expect(tcFromIndex.toString()).toBe(line);
 
 		// Timecode string -> frameIndex
-		const tcFromStr = Parse(line, rate);
+		const tcFromStr = parse(line, rate);
 		expect(tcFromStr.frame).toBe(frameIndex);
 
 		// Compare to the previous timecode

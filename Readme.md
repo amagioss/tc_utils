@@ -17,7 +17,7 @@ can be in one of the following formats:
 ```python
 import tc_utils
 
-# Retruns: "smpte_timecode_nondrop"
+# Returns: "smpte_timecode_non_drop"
 tc_utils.GetTimecodeType("01:02:03:04")
 
 # Returns: 4803.466666666666
@@ -27,10 +27,10 @@ tc_utils.ParseTimeStr("01:20:03:14", tc_utils.Rate_30)
 tc_utils.ParseTimeStr("01:20:03;14", tc_utils.Rate_29_97)
 
 # Returns: '01:20:03;14'
-tc_utils.GetTimeStr(4803.470, tc_utils.SmpteTimecode, rate=tc_utils.Rate_29_97)
+tc_utils.GetTimeStr(4803.470, tc_utils.SmpteTimecodeDrop, rate=tc_utils.Rate_29_97)
 
 # Returns: '01:20:03:14'
-tc_utils.GetTimeStr(4803.470, tc_utils.SmpteTimecode, rate=tc_utils.Rate_30) 
+tc_utils.GetTimeStr(4803.470, tc_utils.SmpteTimecodeNonDrop, rate=tc_utils.Rate_30) 
 
 ```
 
@@ -56,10 +56,32 @@ go test -v ./timecode/ -run TestTcConversion
 Derived from the original code present in https://github.com/spiretechnology/js-timecode
 
 ```bash
-npm i jest
+npm i
 npm run test
 ```
 
+## JS Usage
+```bash
+npm start
+
+import  * as tcUtils from './dist/index';
+
+# Returns: "smpte_timecode_non_drop"
+tcUtils.getTimecodeType("01:02:03:04")
+
+# Returns: 4803.46699
+tcUtils.parseTimeStr("01:20:03:14", tcUtils.Rate_30)
+
+# Returns: 4803.465
+tcUtils.parseTimeStr("01:20:03;14", tcUtils.Rate_29_97)
+
+# Returns: '01:20:03;14'
+tcUtils.getTimeStr(4803.470, tcUtils.smpteTimecodeDrop, tcUtils.Rate_29_97)
+
+# Returns: '01:20:03:14'
+tcUtils.getTimeStr(4803.470, tcUtils.smpteTimecodeNonDrop, tcUtils.Rate_30) 
+
+```
 
 ## Testing
 
