@@ -1,4 +1,4 @@
-module github.com/orgs/amagioss/tc_utils/go
+module github.com/amagioss/tc_utils/go
 
 go 1.22.1
 

@@ -3,7 +3,7 @@ package timecode_test
 import (
 	"testing"
 
-	"github.com/orgs/amagioss/tc_utils/go/timecode"
+	"github.com/amagioss/tc_utils/go/timecode"
 )
 
 func TestParse_NDF(t *testing.T) {

@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/orgs/amagioss/tc_utils/go/timecode"
+	"github.com/amagioss/tc_utils/go/timecode"
 	"github.com/stretchr/testify/require"
 )
 
