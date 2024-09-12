@@ -35,6 +35,10 @@ export function parseRate(str: string): Rate | null {
 			return Rate_25;
 		case '25.0':
 				return Rate_25;
+		case '50':
+				return Rate_50;
+		case '50.0':
+				return Rate_50;
 		default:
 			return null;
 	}
