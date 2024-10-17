@@ -9,14 +9,18 @@ class Rate:
     num: int
     den: int
 
-Rate_24 = Rate("24", 24, 0, 24, 1)
-Rate_25 = Rate("25", 25, 0, 25, 1)
-Rate_30 = Rate("30", 30, 0, 30, 1)
-Rate_29_97 = Rate("29.97", 30, 2, 30000, 1001)
-Rate_50 = Rate("50", 50, 0, 50, 1)
-Rate_59_94 = Rate("59.94", 60, 4, 60000, 1001)
-Rate_60 = Rate("60", 60, 0, 60, 1)
-Rate_23_976 = Rate("23.976", 24, 0, 24000, 1001)
+    def generate_rate(rate_str):
+        if rate_str == "23.976":
+            return Rate("23.976", 24, 0, 24000, 1001)
+        elif rate_str == "59.94":
+            return Rate("59.94", 60, 4, 60000, 1001)
+        elif rate_str == "29.97":
+            return Rate("29.97", 30, 2, 30000, 1001)
+        elif isinstance(rate_str, int):
+            nominal = int(rate_str)
+            return Rate(str(rate_str), nominal, 0, nominal, 1)
+        else:
+            raise ValueError("Unsupported rate string")
 
 @dataclass
 class Components:
@@ -46,15 +50,6 @@ class Timecode:
         else:
             return truncate(float(self.frame) / float(self.rate.nominal), 5)
 
-    # def Seconds(self) -> float:
-    #     if self.rate.rate_str == "29.97":
-    #         return float(self.frame) / 29.97 
-    #     elif self.rate.rate_str == "59.94":
-    #         return float(self.frame) / 59.94
-    #     elif self.rate.rate_str == "23.976":
-    #         return float(self.frame) / 23.976
-    #     else:
-    #         return float(self.frame) / float(self.rate.nominal)
         
     def componentNDF(self, frame: int) -> Components:
         hh = frame // (3600 * self.rate.nominal)
@@ -101,8 +96,6 @@ class Timecode:
 
     def AddFrames(self, frames: int) -> None:
         self.frame += frames
-        
 
-
-
-
+    def SubtractFrames(self, frames: int) -> None:
+        self.frame -= frames
