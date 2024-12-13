@@ -40,15 +40,15 @@ func ParseRate(str string) (Rate, bool) {
 	switch str {
 	case "23.976", "23.98":
 		return Rate_23_976, true
-	case "24":
+	case "24", "24.0":
 		return Rate_24, true
-	case "25":
+	case "25", "25.0":
 		return Rate_25, true
-	case "30":
+	case "30", "30.0":
 		return Rate_30, true
 	case "29.97":
 		return Rate_29_97, true
-	case "60":
+	case "60", "60.0":
 		return Rate_60, true
 	case "59.94":
 		return Rate_59_94, true
