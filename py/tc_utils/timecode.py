@@ -16,9 +16,14 @@ class Rate:
             return Rate("59.94", 60, 4, 60000, 1001)
         elif rate_str == "29.97":
             return Rate("29.97", 30, 2, 30000, 1001)
-        elif isinstance(rate_str, int):
-            nominal = int(rate_str)
-            return Rate(str(rate_str), nominal, 0, nominal, 1)
+        elif rate_str == "24":
+            return Rate("24", 24, 0, 24, 1)
+        elif rate_str == "25":
+            return Rate("25", 25, 0, 25, 1)
+        elif rate_str == "30":
+            return Rate("30", 30, 0, 30, 1)
+        elif rate_str == "60":
+            return Rate("60", 60, 0, 60, 1)
         else:
             raise ValueError("Unsupported rate string")
 
