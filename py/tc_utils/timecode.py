@@ -12,6 +12,8 @@ class Rate:
     def generate_rate(rate_str):
         if rate_str == "23.976":
             return Rate("23.976", 24, 0, 24000, 1001)
+        elif rate_str == "47.952":
+            return Rate("47.952", 48, 0, 48000, 1001)
         elif rate_str == "59.94":
             return Rate("59.94", 60, 4, 60000, 1001)
         elif rate_str == "29.97":
@@ -46,6 +48,8 @@ class Timecode:
         elif self.rate.rate_str == "59.94":
             return truncate(float(self.frame) * self.rate.den / self.rate.num, 5)
         elif self.rate.rate_str == "23.976":
+            return truncate(float(self.frame) * self.rate.den / self.rate.num, 5)
+        elif self.rate.rate_str == "47.952":
             return truncate(float(self.frame) * self.rate.den / self.rate.num, 5)
         else:
             return truncate(float(self.frame) / float(self.rate.nominal), 5)

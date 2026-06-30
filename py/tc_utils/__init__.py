@@ -15,6 +15,7 @@ Rate_50 = Rate.generate_rate(50)
 Rate_59_94 = Rate.generate_rate("59.94")
 Rate_60 = Rate.generate_rate(60)
 Rate_23_976 = Rate.generate_rate("23.976")
+Rate_47_952 = Rate.generate_rate("47.952")
 
 def GetTimecodeType(time_str: str) -> str:
     if normaTimeRegex.match(time_str):
