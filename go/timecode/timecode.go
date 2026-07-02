@@ -39,6 +39,8 @@ func (t *Timecode) Seconds() float64 {
 		return truncate(float64(t.frame*int64(t.rate.Den))/float64(t.rate.Num), 5)
 	case "23.976":
 		return truncate(float64(t.frame*int64(t.rate.Den))/float64(t.rate.Num), 5)
+	case "47.952":
+		return truncate(float64(t.frame*int64(t.rate.Den))/float64(t.rate.Num), 5)
 	case "59.94":
 		return truncate(float64(t.frame*int64(t.rate.Den))/float64(t.rate.Num), 5)
 	default:

@@ -14,6 +14,7 @@ func TestRateFromFraction(t *testing.T) {
 	}
 	cases := []testCase{
 		{24000, 1001, timecode.Rate_23_976},
+		{48000, 1001, timecode.Rate_47_952},
 		{24, 1, timecode.Rate_24},
 		{30, 1, timecode.Rate_30},
 		{30000, 1001, timecode.Rate_29_97},
@@ -29,6 +30,7 @@ func TestRateFromFraction(t *testing.T) {
 func TestRateFromFractionBuiltinRates(t *testing.T) {
 	cases := []timecode.Rate{
 		timecode.Rate_23_976,
+		timecode.Rate_47_952,
 		timecode.Rate_24,
 		timecode.Rate_30,
 		timecode.Rate_29_97,

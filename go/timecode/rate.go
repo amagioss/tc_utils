@@ -14,6 +14,7 @@ const (
 var (
 	Rate_None   = Rate{"", 0, 0, 0, 0}
 	Rate_23_976 = Rate{"23.976", 24, 0, 24000, 1001}
+	Rate_47_952 = Rate{"47.952", 48, 0, 48000, 1001}
 	Rate_24     = Rate{"24", 24, 0, 24, 1}
 	Rate_25     = Rate{"25", 25, 0, 25, 1}
 	Rate_30     = Rate{"30", 30, 0, 30, 1}
@@ -40,6 +41,8 @@ func ParseRate(str string) (Rate, bool) {
 	switch str {
 	case "23.976", "23.98":
 		return Rate_23_976, true
+	case "47.952", "47.95":
+		return Rate_47_952, true
 	case "24", "24.0":
 		return Rate_24, true
 	case "25", "25.0":
@@ -64,6 +67,8 @@ func RateFromFraction(num, den int) Rate {
 	switch (fraction{num, den}) {
 	case fraction{24000, 1001}:
 		return Rate_23_976
+	case fraction{48000, 1001}:
+		return Rate_47_952
 	case fraction{24, 1}:
 		return Rate_24
 	case fraction{25, 1}:
