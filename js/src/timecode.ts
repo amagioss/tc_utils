@@ -23,7 +23,7 @@ export class Timecode {
 	
 	public seconds(): number {
 		const rateStr = this.rate.rateStr;
-		if (rateStr === "29.97" || rateStr === "59.94" || rateStr === "23.976") {
+		if (rateStr === "29.97" || rateStr === "59.94" || rateStr === "23.976" || rateStr === "47.952") {
 		  return truncate(parseFloat((this.frame * this.rate.den / this.rate.num).toFixed(3)), 5);
 		} else {
 		  return truncate(parseFloat((this.frame / this.rate.nominal).toFixed(3)), 5);

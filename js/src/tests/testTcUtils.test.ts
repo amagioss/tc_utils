@@ -37,6 +37,7 @@ describe('Non-Drop Frame Timecode Tests', () => {
         ["01:39:23:23", tcUtils.Rate_30, 5963.7666],
         ["01:47:18:23", tcUtils.Rate_23_976, 6445.397291666667],
         ["01:47:18:23", tcUtils.Rate_24, 6438.958333333333],
+        ["01:47:18:23", tcUtils.Rate_47_952, 6444.917645833333],
         ["01:17:41:52", tcUtils.Rate_59_94, 4666.528533333333],
     ];
 
@@ -64,6 +65,7 @@ describe('testing timecode', () => {
     { framerate: tcUtils.Rate_29_97, sep: ';', timestampFormat: tcUtils.smpteTimecodeDrop },
     { framerate: tcUtils.Rate_59_94, sep: ';', timestampFormat: tcUtils.smpteTimecodeDrop },
     { framerate: tcUtils.Rate_23_976, sep: ':', timestampFormat: tcUtils.smpteTimecodeNonDrop },
+    { framerate: tcUtils.Rate_47_952, sep: ':', timestampFormat: tcUtils.smpteTimecodeNonDrop },
     { framerate: tcUtils.Rate_30, sep: ':', timestampFormat: tcUtils.smpteTimecodeNonDrop },
     { framerate: tcUtils.Rate_29_97, sep: '.', timestampFormat: tcUtils.normalTimestamp}
   ];
