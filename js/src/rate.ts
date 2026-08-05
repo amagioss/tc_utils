@@ -14,6 +14,7 @@ export function parseRate(str: string): Rate | null {
 	switch (str) {
 		case '23.976':
 		case '23.98':
+		case '23.97':
 			return Rate_23_976;
 		case '47.952':
 		case '47.95':
@@ -35,9 +36,11 @@ export function parseRate(str: string): Rate | null {
 		case '60.0':
 			return Rate_60;
 		case '25':
-			return Rate_25;
 		case '25.0':
-				return Rate_25;
+			return Rate_25;
+		case '50':
+		case '50.0':
+			return Rate_50;
 		default:
 			return null;
 	}
@@ -50,10 +53,14 @@ export function rateFromFraction(num: number, den: number): Rate {
 		return Rate_47_952;
 	} else if (num === 24 && den === 1) {
 		return Rate_24;
+	} else if (num === 25 && den === 1) {
+		return Rate_25;
 	} else if (num === 30000 && den === 1001) {
 		return Rate_29_97;
 	} else if (num === 30 && den === 1) {
 		return Rate_30;
+	} else if (num === 50 && den === 1) {
+		return Rate_50;
 	} else if (num === 60000 && den === 1001) {
 		return Rate_59_94;
 	} else if (num === 60 && den === 1) {
