@@ -16,6 +16,7 @@ var (
 	Rate_23_976 = Rate{"23.976", 24, 0, 24000, 1001}
 	Rate_47_952 = Rate{"47.952", 48, 0, 48000, 1001}
 	Rate_24     = Rate{"24", 24, 0, 24, 1}
+	Rate_48     = Rate{"48", 48, 0, 48, 1}
 	Rate_25     = Rate{"25", 25, 0, 25, 1}
 	Rate_30     = Rate{"30", 30, 0, 30, 1}
 	Rate_29_97  = Rate{"29.97", 30, 2, 30000, 1001}
@@ -46,6 +47,8 @@ func ParseRate(str string) (Rate, bool) {
 		return Rate_47_952, true
 	case "24", "24.0":
 		return Rate_24, true
+	case "48", "48.0":
+		return Rate_48, true
 	case "25", "25.0":
 		return Rate_25, true
 	case "30", "30.0":
@@ -74,6 +77,8 @@ func RateFromFraction(num, den int) Rate {
 		return Rate_47_952
 	case fraction{24, 1}:
 		return Rate_24
+	case fraction{48, 1}:
+		return Rate_48
 	case fraction{25, 1}:
 		return Rate_25
 	case fraction{30, 1}:
