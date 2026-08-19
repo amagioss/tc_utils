@@ -223,6 +223,7 @@ func TestNDFToTc(t *testing.T) {
 		"test_15": {TimecodeStr: "01:47:18:23", FrameRate: timecode.Rate_24, ExpectedTc: 6438.958333333333},     //6438.958333333333 = (3600*24+47*60*24+18*24+23)/24
 		"test_16": {TimecodeStr: "01:17:41:52", FrameRate: timecode.Rate_59_94, ExpectedTc: 4666.528533333333},  //4666.528533333333 = (3600*60+17*60*60+41*60+52)*1001/60000
 		"test_17": {TimecodeStr: "01:47:18:23", FrameRate: timecode.Rate_47_952, ExpectedTc: 6444.917645833333}, //6444.917645833333 = (3600*48+47*60*48+18*48+23)*1001/48000
+		"test_18": {TimecodeStr: "01:47:18:23", FrameRate: timecode.Rate_48, ExpectedTc: 6438.479166666667},     //6438.479166666667 = (3600*48+47*60*48+18*48+23)/48
 	}
 
 	for name, test := range tests {

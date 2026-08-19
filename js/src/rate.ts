@@ -23,6 +23,9 @@ export function parseRate(str: string): Rate | null {
 			return Rate_24;
 		case '24.0':
 			return Rate_24;
+		case '48':
+		case '48.0':
+			return Rate_48;
 		case '29.97':
 			return Rate_29_97;
 		case '30':
@@ -53,6 +56,8 @@ export function rateFromFraction(num: number, den: number): Rate {
 		return Rate_47_952;
 	} else if (num === 24 && den === 1) {
 		return Rate_24;
+	} else if (num === 48 && den === 1) {
+		return Rate_48;
 	} else if (num === 25 && den === 1) {
 		return Rate_25;
 	} else if (num === 30000 && den === 1001) {
@@ -102,6 +107,13 @@ export const Rate_24: Rate = {
 	num: 24,
 	den: 1,
 	rateStr: "24"
+};
+export const Rate_48: Rate = {
+	nominal: 48,
+	drop: 0,
+	num: 48,
+	den: 1,
+	rateStr: "48"
 };
 export const Rate_25: Rate = {
 	nominal: 25,

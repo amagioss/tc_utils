@@ -10,9 +10,9 @@ class Rate:
     den: int
 
     def generate_rate(rate_str):
-        if rate_str == "23.976":
+        if rate_str in ("23.976", "23.98", "23.97"):
             return Rate("23.976", 24, 0, 24000, 1001)
-        elif rate_str == "47.952":
+        elif rate_str in ("47.952", "47.95"):
             return Rate("47.952", 48, 0, 48000, 1001)
         elif rate_str == "59.94":
             return Rate("59.94", 60, 4, 60000, 1001)

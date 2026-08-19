@@ -82,3 +82,31 @@ def test_get_time_str_normal_timestamp():
 def test_get_time_str_smpte_timecode():
     tc = TimecodeWrapper(24, timecode_str="00:01:00:00")
     assert GetTimeStr(60.0, "smpte_timecode_nondrop", rate=Rate.generate_rate(24)) == "00:01:00:00"
+
+@pytest.mark.parametrize('rate_str, expected', [
+    ("23.976", Rate("23.976", 24, 0, 24000, 1001)),
+    ("23.98", Rate("23.976", 24, 0, 24000, 1001)),
+    ("23.97", Rate("23.976", 24, 0, 24000, 1001)),
+    ("47.952", Rate("47.952", 48, 0, 48000, 1001)),
+    ("47.95", Rate("47.952", 48, 0, 48000, 1001)),
+    ("29.97", Rate("29.97", 30, 2, 30000, 1001)),
+    ("59.94", Rate("59.94", 60, 4, 60000, 1001)),
+    (24, Rate("24", 24, 0, 24, 1)),
+    (48, Rate("48", 48, 0, 48, 1)),
+])
+def test_generate_rate_aliases(rate_str, expected):
+    assert Rate.generate_rate(rate_str) == expected
+
+def test_generate_rate_unsupported():
+    with pytest.raises(ValueError, match="Unsupported rate string"):
+        Rate.generate_rate("23.9")
+
+def test_timecode_wrapper_23_97_alias():
+    tc = TimecodeWrapper("23.97", timecode_str="00:01:00:00")
+    assert tc.rate == Rate("23.976", 24, 0, 24000, 1001)
+    assert tc.to_string() == "00:01:00:00"
+
+def test_timecode_wrapper_47_95_alias():
+    tc = TimecodeWrapper("47.95", timecode_str="00:01:00:00")
+    assert tc.rate == Rate("47.952", 48, 0, 48000, 1001)
+    assert tc.to_string() == "00:01:00:00"

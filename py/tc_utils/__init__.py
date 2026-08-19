@@ -8,6 +8,7 @@ SmpteTimecodeNonDrop = "smpte_timecode_nondrop"
 SmpteTimecodeDrop = "smpte_timecode_drop"
 
 Rate_24 = Rate.generate_rate(24)
+Rate_48 = Rate.generate_rate(48)
 Rate_25 = Rate.generate_rate(25)
 Rate_30 = Rate.generate_rate(30)
 Rate_29_97 = Rate.generate_rate("29.97")
